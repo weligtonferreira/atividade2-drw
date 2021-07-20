@@ -4,7 +4,14 @@ Este projeto está estruturado com os assuntos relacionados a arquitetura EJB e 
 
 ## Aulas
 
-* [Aula 1: SessionBeans - Stateless](https://github.com/ifpb-disciplinas-2021-1/ads-dac-sessionbean/commit/9aca20af56e140d15a1e9777aa9072b68c2ba8f8)*
+* [Aula 1: SessionBeans - Stateless](https://github.com/ifpb-disciplinas-2021-1/ads-dac-sessionbean/commit/9aca20af56e140d15a1e9777aa9072b68c2ba8f8) 
+
+## Executando o projeto
+
+Para executarmos o código precisamos realizar o clone do projeto. Posteriormente, na pasta raiz do projeto, executar os seguintes comandos:
+* `sh run.sh`
+
+A aplicação estará disponível em `http://localhost:8080/core/clientes`.
 
 ## Issues
 
