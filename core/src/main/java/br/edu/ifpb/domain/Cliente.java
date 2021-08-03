@@ -1,7 +1,9 @@
 package br.edu.ifpb.domain;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
+@XmlRootElement
 public class Cliente {
 
     private int id;
