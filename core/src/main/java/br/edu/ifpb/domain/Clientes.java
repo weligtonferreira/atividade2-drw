@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface Clientes {
 
-    void novo(Cliente cliente);
-
+    Cliente novo(Cliente cliente);
+    Cliente localizar(int id);
     List<Cliente> todos();
 
 }

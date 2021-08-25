@@ -11,8 +11,9 @@ public class ClientesEmMemoria implements Clientes {
     private List<Cliente> clientes = new ArrayList<>();
 
     @Override
-    public void novo(Cliente cliente) {
+    public Cliente novo(Cliente cliente) {
         this.clientes.add(cliente);
+        return cliente;
     }
 
     @Override
@@ -21,5 +22,10 @@ public class ClientesEmMemoria implements Clientes {
             .unmodifiableList(
                 this.clientes
             );
+    }
+
+    @Override
+    public Cliente localizar(int id) {
+        return new Cliente(id,"","");
     }
 }

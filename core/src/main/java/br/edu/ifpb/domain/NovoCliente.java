@@ -10,10 +10,10 @@ public class NovoCliente {
     @EJB
     private Clientes clientes;
     
-    public void novo(Cliente cliente){
+    public Cliente novo(Cliente cliente){
         // validações...
         Objects.requireNonNull(cliente,"O cliente não pode ser nulo");
-        clientes.novo(cliente);
+        return clientes.novo(cliente);
     }
         
 }

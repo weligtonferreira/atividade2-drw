@@ -23,19 +23,22 @@ public class ClientesEmJDBC implements Clientes {
     private DataSource dataSource;
 
     @Override
-    public void novo(Cliente cliente) {
+    public Cliente novo(Cliente cliente) {
         try {
             PreparedStatement statement = this.dataSource
                 .getConnection() //2
                 .prepareStatement(
-                    "INSERT INTO clientes (cpf, nome) VALUES(?,?) "
+                    "INSERT INTO clientes (cpf, nome) VALUES(?,?) RETURNING *; "
                 );
             statement.setString(1,cliente.getCpf());
             statement.setString(2,cliente.getNome());
-            statement.executeUpdate();
+            ResultSet result = statement.executeQuery();
+             if(result.next()) 
+            return criarCliente(result);
         } catch (SQLException ex) {
             Logger.getLogger(ClientesEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
         }
+        return new Cliente();
     }
 
     @Override
@@ -64,5 +67,22 @@ public class ClientesEmJDBC implements Clientes {
         String cpf = result.getString("cpf");
         int id = result.getInt("id");
         return new Cliente(id,cpf,nome);
+    }
+
+    @Override
+    public Cliente localizar(int id) {
+        try {
+            PreparedStatement statement = this.dataSource
+                .getConnection()
+                .prepareStatement(
+                    "SELECT * FROM clientes WHERE id= ?"
+                );
+            statement.setInt(1,id);
+            ResultSet result = statement.executeQuery();
+            if(result.next()) 
+            return criarCliente(result);
+            
+        } catch (SQLException ex) {}
+        return new Cliente();
     }
 }
