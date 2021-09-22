@@ -1,5 +1,6 @@
 package br.edu.ifpb.infra;
 
+import br.edu.ifpb.domain.Produto;
 import br.edu.ifpb.domain.compra.Carrinho;
 
 import javax.ejb.Remove;
@@ -15,13 +16,18 @@ import java.util.List;
 @Stateful
 public class CarrinhoOnline implements Carrinho {
     //carrinho.produtos().add("novo")
-    private final List<String> produtos = new LinkedList<>();
+    private final List<Produto> produtos = new LinkedList<>();
     @Override
-    public void adicionar(String produto) {
+    public void adicionar(Produto produto) {
         this.produtos.add(produto);
     }
+    
     @Override
-    public List<String> produtos() {
+    public void excluir(Produto produto) {
+        this.produtos.remove(produto);
+    }
+    @Override
+    public List<Produto> produtos() {
         return Collections.unmodifiableList(
                 this.produtos
         );

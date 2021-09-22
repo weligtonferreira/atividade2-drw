@@ -5,7 +5,9 @@ import br.edu.ifpb.domain.Cliente;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.ejb.Stateless;
 
+@Stateless
 public class ClientesEmMemoria implements Clientes {
 
     private List<Cliente> clientes = new ArrayList<>();
@@ -26,6 +28,23 @@ public class ClientesEmMemoria implements Clientes {
 
     @Override
     public Cliente localizar(int id) {
-        return new Cliente(id,"","");
+        return this.clientes
+                .stream()
+                .filter(c -> c.getId() == id)
+                .findFirst()
+                .orElse(new Cliente());
+    }
+
+    @Override
+    public Cliente atualiza(Cliente cliente) {
+        this.clientes.removeIf(c -> c.getId() == cliente.getId());
+        this.clientes.add(cliente);
+        return cliente;
+    }
+
+    @Override
+    public Cliente exclui(int id) {
+        this.clientes.removeIf(c -> c.getId() == id);
+        return new Cliente();
     }
 }

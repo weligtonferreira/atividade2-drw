@@ -1,5 +1,6 @@
 package br.edu.ifpb.web.jsf;
 
+import br.edu.ifpb.domain.Produto;
 import br.edu.ifpb.domain.compra.Carrinho;
 
 import javax.enterprise.context.SessionScoped;
@@ -17,12 +18,17 @@ public class ControladorDeCarrinho implements Serializable {
 
     @Inject
     private Carrinho carrinho; //session-key: 90ac0300141f-ffffffffe7de3f3d-0
-    private String produto;
-
-    public String novo(){
-        this.carrinho.adicionar(this.produto);
+    
+    public String novo(Produto produto){
+        this.carrinho.adicionar(produto);
         return null;
     }
+    
+    public String excluir(Produto produto){
+        this.carrinho.excluir(produto);
+        return null;
+    }
+    
     public String concluir(){
         this.carrinho.finalizar();
         novaInstanciaDoCarrinho();
@@ -44,17 +50,7 @@ public class ControladorDeCarrinho implements Serializable {
         session.invalidate();
     }
 
-    public List<String> listar(){
+    public List<Produto> listar(){
         return this.carrinho.produtos();
     }
-
-    public void setProduto(String produto){
-        this.produto =produto;
-    }
-    public String getProduto(){
-        return this.produto;
-    }
-    
-    
-
 }

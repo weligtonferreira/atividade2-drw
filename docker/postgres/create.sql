@@ -4,3 +4,10 @@ CREATE TABLE clientes(
     id serial,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE produtos (
+    id serial,
+    descricao VARCHAR(50),
+    valor DECIMAL,
+    PRIMARY KEY (id)
+);

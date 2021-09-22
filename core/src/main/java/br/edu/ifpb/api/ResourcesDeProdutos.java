@@ -1,10 +1,12 @@
 package br.edu.ifpb.api;
 
-import br.edu.ifpb.domain.AtualizaCliente;
-import br.edu.ifpb.domain.Cliente;
-import br.edu.ifpb.domain.Clientes;
-import br.edu.ifpb.domain.ListaDeClientes;
-import br.edu.ifpb.domain.NovoCliente;
+import br.edu.ifpb.domain.AtualizaProduto;
+import br.edu.ifpb.domain.Produto;
+import br.edu.ifpb.domain.ListaDeProdutos;
+import br.edu.ifpb.domain.NovoProduto;
+import br.edu.ifpb.domain.ProdutoRequisicao;
+import br.edu.ifpb.domain.Produtos;
+import java.math.BigDecimal;
 import java.net.URI;
 
 import javax.inject.Inject;
@@ -21,30 +23,31 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 //@Stateless
-@Path("clientes") //localhost:8080/core/api/clientes
+@Path("produtos") //localhost:8080/core/api/clientes
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-public class ResourcesDeClientes {
+public class ResourcesDeProdutos {
     @Inject
-    private ListaDeClientes todosOsClientes;
+    private ListaDeProdutos todosOsProdutos;
     @Inject
-    private NovoCliente novocliente;
+    private NovoProduto novoProduto;
     @Inject
-    private AtualizaCliente atualizaCliente;
+    private AtualizaProduto atualizaProduto;
     
     @Inject
-    private Clientes clientes;
+    private Produtos produtos;
 
     @GET
-    public List<Cliente> todos(){
-        return this.todosOsClientes.todosOsClientes();
+    public List<Produto> todos(){
+        return this.todosOsProdutos.todosOsProdutos();
     }
     
     @POST //criar novo recurso (cliente)
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response criarCliente(Cliente cliente){ //xml, json
-        Cliente resposta = novocliente.novo(cliente);
+    public Response criarProduto(ProdutoRequisicao produto){ //xml, json
+        Produto produtoConvertido = new Produto(produto.getDescricao(), new BigDecimal(produto.getValor()));
+        Produto resposta = novoProduto.novo(produtoConvertido);
 //      return Response.ok() //200
-        URI uri = URI.create("localhost:8080/core/api/clientes/"+resposta.getId());
+        URI uri = URI.create("localhost:8080/core/api/produtos/"+resposta.getId());
         return Response.created(uri) //201
           .entity(resposta) 
           .build();
@@ -54,17 +57,17 @@ public class ResourcesDeClientes {
     @GET
     @Path("{id}") //     .../clientes/{id}
     public Response localizar(@PathParam("id") int id){
-        Cliente cliente = clientes.localizar(id);
+        Produto produto = produtos.localizar(id);
         return Response.ok()
-            .entity(cliente)
+            .entity(produto)
             .build();
     }
     
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response atualizarCliente(Cliente cliente) {
-        Cliente resposta = atualizaCliente.atualiza(cliente);
+    public Response atualizarProduto(Produto produto) {
+        Produto resposta = atualizaProduto.atualiza(produto);
         return Response.ok()
                 .entity(resposta)
                 .build();
@@ -72,8 +75,8 @@ public class ResourcesDeClientes {
     
     @DELETE
     @Path("{id}")
-    public Response excluiCliente(@PathParam("id") int id) {
-        clientes.exclui(id);
+    public Response excluiProduto(@PathParam("id") int id) {
+        produtos.exclui(id);
         return Response.ok()
                 .build();
     }

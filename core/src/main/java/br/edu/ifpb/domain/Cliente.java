@@ -2,6 +2,7 @@ package br.edu.ifpb.domain;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
+import java.util.Random;
 
 @XmlRootElement
 public class Cliente {
@@ -11,6 +12,8 @@ public class Cliente {
     private String nome;
 
     public Cliente() {
+        Random randomizador = new Random();
+        this.id = randomizador.nextInt(1000);
     }
 
     public Cliente(String cpf,String nome) {

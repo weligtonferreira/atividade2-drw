@@ -1,7 +1,8 @@
 package br.edu.ifpb.infra;
 
-import br.edu.ifpb.domain.Clientes;
-import br.edu.ifpb.domain.Cliente;
+import br.edu.ifpb.domain.Produto;
+import br.edu.ifpb.domain.Produtos;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,42 +18,42 @@ import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
 //@Stateless
-public class ClientesEmJDBC implements Clientes {
+public class ProdutosEmJDBC implements Produtos {
 
     @Resource(lookup = "java:app/jdbc/pgadmin")
     private DataSource dataSource;
 
     @Override
-    public Cliente novo(Cliente cliente) {
+    public Produto novo(Produto produto) {
         try {
             PreparedStatement statement = this.dataSource
                 .getConnection() //2
                 .prepareStatement(
-                    "INSERT INTO clientes (cpf, nome) VALUES(?,?) RETURNING *; "
+                    "INSERT INTO produtos (descricao, valor) VALUES(?,?) RETURNING *; "
                 );
-            statement.setString(1,cliente.getCpf());
-            statement.setString(2,cliente.getNome());
+            statement.setString(1,produto.getDescricao());
+            statement.setBigDecimal(2,produto.getValor());
             ResultSet result = statement.executeQuery();
-             if(result.next()) 
-            return criarCliente(result);
+            if(result.next()) 
+            return criarProduto(result);
         } catch (SQLException ex) {
-            Logger.getLogger(ClientesEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
+            Logger.getLogger(ProdutosEmJDBC.class.getName()).log(Level.SEVERE,null,ex);
         }
-        return new Cliente();
+        return new Produto();
     }
 
     @Override
-    public List<Cliente> todos() {
+    public List<Produto> todos() {
         try {
-            List<Cliente> lista = new ArrayList<>();
+            List<Produto> lista = new ArrayList<>();
             ResultSet result = this.dataSource
                 .getConnection()
                 .prepareStatement(
-                    "SELECT * FROM clientes"
+                    "SELECT * FROM produtos"
                 ).executeQuery();
             while (result.next()) {
                 lista.add(
-                    criarCliente(result)
+                    criarProduto(result)
                 );
             }
             return lista;
@@ -62,71 +63,71 @@ public class ClientesEmJDBC implements Clientes {
         }
     }
 
-    private Cliente criarCliente(ResultSet result) throws SQLException {
-        String nome = result.getString("nome");
-        String cpf = result.getString("cpf");
+    private Produto criarProduto(ResultSet result) throws SQLException {
+        String descricao = result.getString("descricao");
+        BigDecimal valor = result.getBigDecimal("valor");
         int id = result.getInt("id");
-        return new Cliente(id,cpf,nome);
+        return new Produto(id,descricao,valor);
     }
 
     @Override
-    public Cliente localizar(int id) {
+    public Produto localizar(int id) {
         try {
             PreparedStatement statement = this.dataSource
                 .getConnection()
                 .prepareStatement(
-                    "SELECT * FROM clientes WHERE id= ?"
+                    "SELECT * FROM produtos WHERE id= ?"
                 );
             statement.setInt(1,id);
             ResultSet result = statement.executeQuery();
             if(result.next()) 
-            return criarCliente(result);
+            return criarProduto(result);
             
         } catch (SQLException ex) {}
-        return new Cliente();
+        return new Produto();
     }
 
     @Override
-    public Cliente atualiza(Cliente cliente) {
-        Cliente clienteEncontrado = this.localizar(cliente.getId());
-        if (clienteEncontrado.equals(new Cliente())) {
-            return clienteEncontrado;
+    public Produto atualiza(Produto produto) {
+        Produto produtoEncontrado = this.localizar(produto.getId());
+        if (produtoEncontrado.equals(new Produto())) {
+            return produtoEncontrado;
         }
         try {
             PreparedStatement statement = this.dataSource
                 .getConnection()
                 .prepareStatement(
-                    "UPDATE clientes SET cpf = ?, nome = ? WHERE id= ?"
+                    "UPDATE produtos SET descricao = ?, valor = ? WHERE id= ?"
                 );
-            statement.setString(1, cliente.getCpf());
-            statement.setString(2, cliente.getNome());
-            statement.setInt(3, cliente.getId());
+            statement.setString(1, produto.getDescricao());
+            statement.setBigDecimal(2, produto.getValor());
+            statement.setInt(3, produto.getId());
             ResultSet result = statement.executeQuery();
             if(result.next()) 
-            return criarCliente(result);
+            return criarProduto(result);
             
         } catch (SQLException ex) {}
-        return new Cliente();
+        return new Produto();
     }
 
     @Override
-    public Cliente exclui(int id) {
-        Cliente clienteEncontrado = this.localizar(id);
-        if (clienteEncontrado.equals(new Cliente())) {
-            return clienteEncontrado;
+    public Produto exclui(int id) {
+        Produto produtoEncontrado = this.localizar(id);
+        if (produtoEncontrado.equals(new Produto())) {
+            return produtoEncontrado;
         }
         try {
             PreparedStatement statement = this.dataSource
                 .getConnection()
                 .prepareStatement(
-                    "DELETE FROM clientes WHERE id= ?"
+                    "DELETE FROM produtos WHERE id= ?"
                 );
             statement.setInt(1, id);
             ResultSet result = statement.executeQuery();
             if(result.next()) 
-            return criarCliente(result);
+            return criarProduto(result);
             
         } catch (SQLException ex) {}
-        return new Cliente();
+        return new Produto();
     }
 }
