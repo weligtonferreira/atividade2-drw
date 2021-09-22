@@ -5,6 +5,7 @@ import br.edu.ifpb.domain.Produtos;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 
 @Stateless
@@ -33,6 +34,14 @@ public class ProdutosEmMemoria implements Produtos {
                 .filter(c -> c.getId() == id)
                 .findFirst()
                 .orElse(new Produto());
+    }
+    
+    @Override
+    public List<Produto> localizarPorDescricao(String descricao) {
+        return this.produtos
+                .stream()
+                .filter(p -> p.getDescricao().toUpperCase().contains(descricao.toUpperCase()))
+                .collect(Collectors.toList());
     }
 
     @Override

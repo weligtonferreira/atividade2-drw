@@ -8,6 +8,7 @@ public interface Produtos {
     Produto atualiza(Produto produto);
     Produto exclui(int id);
     Produto localizar(int id);
+    List<Produto> localizarPorDescricao(String descricao);
     List<Produto> todos();
 
 }

@@ -9,7 +9,7 @@
         <h:form class="app-form m-auto">
         <h2 class="text-center">Produtos</h2>
         <h:commandButton action="/faces/produto/create.xhtml?faces-redirect=true" value="Adicionar novo produto" class="btn btn-outline-dark btn-produto mt-5" />
-        <h:dataTable value="#{controladorDeProdutos.listar()}" var="produto" class="container px-4 px-lg-5 text-center mt-5 mb-5 table table-light">
+        <h:dataTable value="#{controladorDeProdutos.listar()}" var="produto" class="px-4 px-lg-5 text-center mt-5 mb-5 table table-light">
             <h:column>
                 <f:facet name="header">Id</f:facet>
                 <h:outputText value="#{produto.id}"></h:outputText>

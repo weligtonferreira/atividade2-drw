@@ -1,6 +1,7 @@
 package br.edu.ifpb.api;
 
 import br.edu.ifpb.domain.AtualizaProduto;
+import br.edu.ifpb.domain.DescricaoRequisicao;
 import br.edu.ifpb.domain.Produto;
 import br.edu.ifpb.domain.ListaDeProdutos;
 import br.edu.ifpb.domain.NovoProduto;
@@ -35,9 +36,19 @@ public class ResourcesDeProdutos {
     
     @Inject
     private Produtos produtos;
-
+    
     @GET
     public List<Produto> todos(){
+        return this.todosOsProdutos.todosOsProdutos();
+    }
+    
+    @GET
+    @Path("descricao/{descricao}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
+    public List<Produto> todos(@PathParam("descricao") String descricao){
+        if (!descricao.equals("")) {
+            return this.produtos.localizarPorDescricao(descricao);
+        }
         return this.todosOsProdutos.todosOsProdutos();
     }
     
@@ -66,8 +77,8 @@ public class ResourcesDeProdutos {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response atualizarProduto(Produto produto) {
-        Produto resposta = atualizaProduto.atualiza(produto);
+    public Response atualizarProduto(Produto produto, @PathParam("id") int id) {
+        Produto resposta = atualizaProduto.atualiza(new Produto(id, produto.getDescricao(), produto.getValor()));
         return Response.ok()
                 .entity(resposta)
                 .build();

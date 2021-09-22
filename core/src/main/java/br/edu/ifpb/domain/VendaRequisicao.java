@@ -7,7 +7,6 @@ package br.edu.ifpb.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,17 +18,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class VendaRequisicao {
     private int id;
     private int idCliente;
-    private List<Integer> idProdutos;
+    private List<VendaProdutoRequisicao> produtos;
     
     public VendaRequisicao() {
         
     }
     
-    public VendaRequisicao(int idCliente, List<Integer> idProdutos) {
+    public VendaRequisicao(int idCliente, List<VendaProdutoRequisicao> produtos) {
         Random randomizador = new Random();
         this.id = randomizador.nextInt(100);
         this.idCliente = idCliente;
-        this.idProdutos = idProdutos;
+        this.produtos = produtos;
     }
 
     public int getId() {
@@ -48,12 +47,12 @@ public class VendaRequisicao {
         this.idCliente = idCliente;
     }
 
-    public List<Integer> getIdProdutos() {
-        return idProdutos;
+    public List<VendaProdutoRequisicao> getProdutos() {
+        return produtos;
     }
 
-    public void setIdProdutos(List<Integer> idProdutos) {
-        this.idProdutos = idProdutos;
+    public void setProdutos(List<VendaProdutoRequisicao> produtos) {
+        this.produtos = produtos;
     }
     
     public Venda toVenda(int id, List<Cliente> clientes, List<Produto> produtos) {
@@ -64,16 +63,12 @@ public class VendaRequisicao {
                 .findFirst()
                 .orElse(new Cliente());
         if (!cliente.equals(new Cliente())) {
-            List<Produto> produtosEncontrados = new ArrayList<>();
-            this.idProdutos.stream().map(idProduto -> produtos
-                    .stream()
-                    .filter(p -> p.getId() == idProduto)
-                    .findFirst()
-                    .orElse(new Produto())).filter(produto -> (!produto.equals(new Produto()))).forEachOrdered(produto -> {
-                        produtosEncontrados.add(produto);
+            List<ProdutoVenda> produtosVenda = new ArrayList<>();
+            this.produtos.stream().forEachOrdered(vendaProdutoRequisicao -> {
+                        produtosVenda.add(vendaProdutoRequisicao.toProdutoVenda(vendaProdutoRequisicao.getIdProduto(), produtos));
             });
-            if (produtosEncontrados.size() > 0) {
-                venda = new Venda(id, cliente, produtosEncontrados);
+            if (produtosVenda.size() > 0) {
+                venda = new Venda(id, cliente, produtosVenda);
             }
         }
         return venda;
@@ -87,16 +82,12 @@ public class VendaRequisicao {
                 .findFirst()
                 .orElse(new Cliente());
         if (!cliente.equals(new Cliente())) {
-            List<Produto> produtosEncontrados = new ArrayList<>();
-            this.idProdutos.stream().map(idProduto -> produtos
-                    .stream()
-                    .filter(p -> p.getId() == idProduto)
-                    .findFirst()
-                    .orElse(new Produto())).filter(produto -> (!produto.equals(new Produto()))).forEachOrdered(produto -> {
-                        produtosEncontrados.add(produto);
+            List<ProdutoVenda> produtosVenda = new ArrayList<>();
+            this.produtos.stream().forEachOrdered(vendaProdutoRequisicao -> {
+                        produtosVenda.add(vendaProdutoRequisicao.toProdutoVenda(vendaProdutoRequisicao.getIdProduto(), produtos));
             });
-            if (produtosEncontrados.size() > 0) {
-                venda = new Venda(cliente, produtosEncontrados);
+            if (produtosVenda.size() > 0) {
+                venda = new Venda(cliente, produtosVenda);
             }
         }
         return venda;

@@ -63,8 +63,8 @@ public class ResourcesDeClientes {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response atualizarCliente(Cliente cliente) {
-        Cliente resposta = atualizaCliente.atualiza(cliente);
+    public Response atualizarCliente(Cliente cliente, @PathParam("id") int id) {
+        Cliente resposta = atualizaCliente.atualiza(new Cliente(id, cliente.getCpf(), cliente.getNome()));
         return Response.ok()
                 .entity(resposta)
                 .build();

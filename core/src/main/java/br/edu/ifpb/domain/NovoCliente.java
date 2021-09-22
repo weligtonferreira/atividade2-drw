@@ -13,7 +13,7 @@ public class NovoCliente {
     public Cliente novo(Cliente cliente){
         // validações...
         Objects.requireNonNull(cliente,"O cliente não pode ser nulo");
-        return clientes.novo(cliente);
+        return clientes.novo(new Cliente(cliente.getCpf(), cliente.getNome()));
     }
         
 }

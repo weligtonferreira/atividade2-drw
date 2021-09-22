@@ -73,8 +73,8 @@ public class ResourcesDeVendas {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
-    public Response atualizarVenda(VendaRequisicao vendaRequisicao) {
-        Venda venda = vendaRequisicao.toVenda(vendaRequisicao.getId(), clientes.todos(), produtos.todos());
+    public Response atualizarVenda(VendaRequisicao vendaRequisicao, @PathParam("id") int id) {
+        Venda venda = vendaRequisicao.toVenda(id, clientes.todos(), produtos.todos());
         Venda resposta = atualizaVenda.atualiza(venda);
         return Response.ok()
                 .entity(resposta)

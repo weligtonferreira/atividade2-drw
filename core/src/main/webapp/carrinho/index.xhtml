@@ -8,24 +8,33 @@
     <ui:define name="content">
         <h:form class="app-form m-auto">
         <h2 class="text-center">Carrinho</h2>
-        <h:dataTable value="#{controladorDeCarrinho.listar()}" var="produto" class="container px-4 px-lg-5 text-center mt-5 mb-5 table table-light">
+        <h:dataTable value="#{controladorDeCarrinho.listar()}" var="produtovenda" class="px-4 px-lg-5 text-center mt-5 mb-5 table table-light">
             <h:column>
                 <f:facet name="header">Id</f:facet>
-                <h:outputText value="#{produto.id}" class="text-center"></h:outputText>
+                <h:outputText value="#{produtovenda.produto.id}" class="text-center"></h:outputText>
             </h:column>
             <h:column>
                 <f:facet name="header">Descrição</f:facet>
-                #{produto.descricao}
+                #{produtovenda.produto.descricao}
             </h:column>
             <h:column>
                 <f:facet name="header">Valor</f:facet>
-                #{produto.valor}
+                #{produtovenda.produto.valor}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Quantidade</f:facet>
+                #{produtovenda.quantidade}
             </h:column>
             <h:column>
                 <f:facet name="header">Remover do carrinho</f:facet>
-                <h:commandButton action="#{controladorDeCarrinho.excluir(produto)}" class="btn btn-outline-dark mt-auto" value="Remover" />
+                <h:commandButton action="#{controladorDeCarrinho.excluir(produtovenda)}" class="btn btn-outline-dark mt-auto" value="Remover" />
             </h:column>
         </h:dataTable>
+        <h:outputText value="Cliente" class="form-label mb-5" />
+        <h:selectOneMenu id="cliente" value="#{controladorDeClientes.cliente.id}" immediate="true" class="form-select mt-3">
+            <f:selectItems value="#{controladorDeClientes.listar()}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente.id}" class="form-select"/>
+        </h:selectOneMenu>
+        <h:commandButton action="#{controladorDeCarrinho.finalizarCompra(controladorDeClientes.cliente.id)}" value="Finalizar compra" class="btn btn-outline-dark btn-produto mt-5" />
     </h:form>
     </ui:define>
 </ui:composition>
